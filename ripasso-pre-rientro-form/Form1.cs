@@ -23,7 +23,7 @@ namespace ripasso_pre_rientro_form
 		}
 
 		private void Form1_Load(object sender, EventArgs e)
-		{
+		{ 
 
 		}
 	}
