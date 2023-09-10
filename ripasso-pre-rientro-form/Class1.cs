@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace ripasso_pre_rientro_form
 {
@@ -157,9 +159,171 @@ namespace ripasso_pre_rientro_form
 			}
 		}
 		//funzione
-		
+
+		public string ricerca()
+		{
+			string[] record = File.ReadAllLines(path);
+			for (int i = 0; i < record.Length; i++)
+			{
+				string[] campi = record[i].Split(';');
+				if (checkBox1.Checked == true)
+				{
+					if (campi[0].ToLower() == textBox7.Text.ToLower())
+					{
+						return record[i];
+
+					}
+					if (checkBox2.Checked == true)
+					{
+						if (campi[1].ToLower() == textBox8.Text.ToLower())
+						{
+							return record[i];
+
+						}
+					}
+					if (checkBox3.Checked == true)
+					{
+						if (campi[2].ToLower() == textBox9.Text.ToLower())
+						{
+							return record[i];
+						}
+					}
+				}
+
+			}
+			return "";
+		}
+		//funzione
+		public void Modifica(string a1, string a2, string a3)
+		{
+			string a = a1;
+
+			string[] ele = new string[1000];
+
+			int dim = 0;
+
+			int control = 0;
+
+			using (StreamReader sw = new StreamReader(path))
+			{
+				string b = sw.ReadLine();
+
+				while (b != null)
+				{
+					ele[dim] = b;
+
+					string[] campi = ele[dim].Split(';');
+
+					for (int i = 0; i < campi.Length; i++)
+					{
+						if (campi[i] == a)
+						{
+							control = dim;
+						}
+					}
+
+					dim++;
+
+					b = sw.ReadLine();
+				}
+			}
+
+			using (StreamWriter sw = new StreamWriter(path))
+			{
+				dim = 0;
+
+				string r = "";
+
+				while (ele[dim] != null)
+				{
+					if (dim == control)
+					{
+						string[] campi2 = ele[dim].Split(';');
+
+						if (a2 != null)
+						{
+							r = r + a2;
+						}
+						else
+						{
+							string[] campi3 = ele[dim].Split(';');
+							r = r + campi3[dim];
+						}
+
+						if (a3 != null)
+						{
+							r = r + ";" + a3;
+						}
+						else
+						{
+							string[] campi4 = ele[dim].Split(';');
+							r = r + ";" + campi4[dim];
+						}
 
 
+
+						sw.WriteLine(r);
+					}
+					else
+					{
+						sw.WriteLine(ele[dim]);
+					}
+
+					dim++;
+				}
+			}
+		}
+
+		//funzione
+		public void Cancellazionelogica(string a1)
+		{
+			bool[] a = new bool[1000];
+
+			string[] a2 = new string[1000];
+
+			string c = a1;
+
+			int dim = 0;
+
+			using (StreamReader sw = new StreamReader(path))
+			{
+				string b = sw.ReadLine();
+
+				while (b != null)
+				{
+					a2[dim] = b;
+
+					string[] campi = b.Split(';');
+
+					if (campi[0] == c)
+					{
+						a[dim] = false;
+					}
+					else
+					{
+						a[dim] = true;
+					}
+					dim++;
+
+					b = sw.ReadLine();
+				}
+			}
+
+			using (StreamWriter sw = new StreamWriter(path))
+			{
+				dim = 0;
+
+				while (a2[dim] != null)
+				{
+
+					if (a[dim] == true)
+					{
+						sw.WriteLine(a2[dim]);
+					}
+					dim++;
+				}
+			}
+		}
 	}
 
 }

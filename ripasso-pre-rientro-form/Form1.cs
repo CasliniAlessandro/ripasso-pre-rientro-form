@@ -132,9 +132,123 @@ namespace ripasso_pre_rientro_form
 
 		}
 
+		private void button6_Click(object sender, EventArgs e)
+		{
+			string y = textBox4.Text;
+			string x = textBox5.Text;
+			string z = textBox6.Text;
 
+			int y1 = 0;
+			int x1 = 0;
+			int z1 = 0;
 
+			bool y2 = false;
+			bool x2 = false;
+			bool z2 = false;
 
+			using (StreamReader sw = new StreamReader(path))
+			{
+				string d = sw.ReadLine();
 
+				string[] c = d.Split(';');
+
+				int dim = 0;
+
+				for (int i = 0; i < c.Length; i++)
+				{
+					if (y == c[dim])
+					{
+						y1 = dim;
+					}
+					if (x == c[dim])
+					{
+						x1 = dim;
+					}
+					if (z == c[dim])
+					{
+						z1 = dim;
+					}
+
+					if (y == "")
+					{
+						y2 = true;
+					}
+					if (x == "")
+					{
+						x2 = true;
+					}
+					if (z == "")
+					{
+						z2 = true;
+					}
+
+					dim++;
+				}
+
+			}
+
+			using (StreamReader sw = new StreamReader(path))
+			{
+				string d = sw.ReadLine();
+
+				while (d != null)
+				{
+
+					string[] campi = d.Split(';');
+
+					if (y2 == true)
+					{
+						listView1.Items.Add("Campo1: ");
+					}
+					else
+					{
+						listView1.Items.Add("Campo1: " + campi[y1]);
+					}
+
+					if (x2 == true)
+					{
+						listView1.Items.Add("Campo2: ");
+					}
+					else
+					{
+						listView1.Items.Add("Campo2: " + campi[x1]);
+					}
+
+					if (z2 == true)
+					{
+						listView1.Items.Add("Campo3: ");
+					}
+					else
+					{
+						listView1.Items.Add("Campo3: " + campi[z1]);
+					}
+
+					listView1.Items.Add("");
+
+					d = sw.ReadLine();
+
+				}
+			}
+
+			textBox4.Text = "";
+			textBox5.Text = "";
+			textBox6.Text = "";
+		}
+
+		private void button7_Click(object sender, EventArgs e)
+		{
+			MessageBox.Show(a.ricerca());
+		}
+
+		private void button8_Click(object sender, EventArgs e)
+		{
+			a.Modifica(textBox10.Text, textBox11.Text, textBox12.Text);
+			
+		}
+		private void button9_Click(object sender, EventArgs e)
+		{
+			f.Canclog(textBox8.Text);
+			textBox8.Text = "";
+		}
 	}
 }
