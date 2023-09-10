@@ -247,8 +247,8 @@ namespace ripasso_pre_rientro_form
 		}
 		private void button9_Click(object sender, EventArgs e)
 		{
-			f.Canclog(textBox8.Text);
-			textBox8.Text = "";
+			a.Cancellazionelogica(textBox8.Text);
+			
 		}
 	}
 }
