@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 
 namespace ripasso_pre_rientro_form
 {
@@ -151,39 +153,39 @@ namespace ripasso_pre_rientro_form
 						sw.WriteLine(coda1 + ";" + coda2 + ";" + coda3 + ";");
 						break;
 					}
-
 					sw.WriteLine(p[dim]);
-
 					dim++;
 				}
 			}
 		}
 		//funzione
 
-		public string ricerca()
+		public string ricerca( bool checkBox1, bool checkBox2, bool checkBox3,string textBox7, string textBox8,string textBox9)
 		{
+			
 			string[] record = File.ReadAllLines(path);
 			for (int i = 0; i < record.Length; i++)
 			{
+			
 				string[] campi = record[i].Split(';');
-				if (checkBox1.Checked == true)
+				if (checkBox1 == true)
 				{
-					if (campi[0].ToLower() == textBox7.Text.ToLower())
+					if (campi[0].ToLower() == textBox7.ToLower())
 					{
 						return record[i];
 
 					}
-					if (checkBox2.Checked == true)
+					if (checkBox2 == true)
 					{
-						if (campi[1].ToLower() == textBox8.Text.ToLower())
+						if (campi[1].ToLower() == textBox8.ToLower())
 						{
 							return record[i];
 
 						}
 					}
-					if (checkBox3.Checked == true)
+					if (checkBox3 == true)
 					{
-						if (campi[2].ToLower() == textBox9.Text.ToLower())
+						if (campi[2].ToLower() == textBox9.ToLower())
 						{
 							return record[i];
 						}
