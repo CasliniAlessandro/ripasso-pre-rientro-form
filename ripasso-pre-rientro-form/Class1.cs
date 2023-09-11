@@ -168,14 +168,14 @@ namespace ripasso_pre_rientro_form
 			{
 			
 				string[] campi = record[i].Split(';');
-				if (checkBox1 == true)
+				if (checkBox1)
 				{
 					if (campi[0].ToLower() == textBox7.ToLower())
 					{
 						return record[i];
 
 					}
-					if (checkBox2 == true)
+					if (checkBox2)
 					{
 						if (campi[1].ToLower() == textBox8.ToLower())
 						{
@@ -183,7 +183,7 @@ namespace ripasso_pre_rientro_form
 
 						}
 					}
-					if (checkBox3 == true)
+					if (checkBox3)
 					{
 						if (campi[2].ToLower() == textBox9.ToLower())
 						{
