@@ -57,7 +57,7 @@ namespace ripasso_pre_rientro_form
 
 		//funzione
 
-		public void LunghezzaFIX(int lung)
+		public void LunghezzaFIX(int l)
 		{
 
 			int[] c = new int[1000];
@@ -76,7 +76,7 @@ namespace ripasso_pre_rientro_form
 				{
 					int b = a.Length;
 
-					c[dim] = lung - b;
+					c[dim] = l - b;
 
 					c2[dim] = a;
 

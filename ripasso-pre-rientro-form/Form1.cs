@@ -237,7 +237,7 @@ namespace ripasso_pre_rientro_form
 
 		private void button7_Click(object sender, EventArgs e)
 		{
-			MessageBox.Show(a.ricerca());
+			a.ricerca(checkBox1.Checked, checkBox2.Checked, checkBox3.Checked,textBox7.Text, textBox8.Text, textBox9.Text);
 		}
 
 		private void button8_Click(object sender, EventArgs e)

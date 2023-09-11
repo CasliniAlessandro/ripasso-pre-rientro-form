@@ -260,9 +260,9 @@
 			// 
 			// button9
 			// 
-			this.button9.Location = new System.Drawing.Point(486, 362);
+			this.button9.Location = new System.Drawing.Point(476, 362);
 			this.button9.Name = "button9";
-			this.button9.Size = new System.Drawing.Size(302, 23);
+			this.button9.Size = new System.Drawing.Size(312, 23);
 			this.button9.TabIndex = 24;
 			this.button9.Text = "CANCELLAZIONE LOGICA";
 			this.button9.UseVisualStyleBackColor = true;
