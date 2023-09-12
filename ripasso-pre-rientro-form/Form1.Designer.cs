@@ -40,7 +40,6 @@
 			this.textBox4 = new System.Windows.Forms.TextBox();
 			this.textBox5 = new System.Windows.Forms.TextBox();
 			this.textBox6 = new System.Windows.Forms.TextBox();
-			this.listView1 = new System.Windows.Forms.ListView();
 			this.button7 = new System.Windows.Forms.Button();
 			this.checkBox1 = new System.Windows.Forms.CheckBox();
 			this.checkBox2 = new System.Windows.Forms.CheckBox();
@@ -53,6 +52,12 @@
 			this.textBox11 = new System.Windows.Forms.TextBox();
 			this.textBox12 = new System.Windows.Forms.TextBox();
 			this.button9 = new System.Windows.Forms.Button();
+			this.textBox13 = new System.Windows.Forms.TextBox();
+			this.dataGridView1 = new System.Windows.Forms.DataGridView();
+			this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// button1
@@ -157,15 +162,6 @@
 			this.textBox6.Size = new System.Drawing.Size(100, 22);
 			this.textBox6.TabIndex = 11;
 			// 
-			// listView1
-			// 
-			this.listView1.HideSelection = false;
-			this.listView1.Location = new System.Drawing.Point(12, 71);
-			this.listView1.Name = "listView1";
-			this.listView1.Size = new System.Drawing.Size(458, 367);
-			this.listView1.TabIndex = 12;
-			this.listView1.UseCompatibleStateImageBehavior = false;
-			// 
 			// button7
 			// 
 			this.button7.Location = new System.Drawing.Point(476, 181);
@@ -268,11 +264,55 @@
 			this.button9.UseVisualStyleBackColor = true;
 			this.button9.Click += new System.EventHandler(this.button9_Click);
 			// 
+			// textBox13
+			// 
+			this.textBox13.Location = new System.Drawing.Point(476, 391);
+			this.textBox13.Name = "textBox13";
+			this.textBox13.Size = new System.Drawing.Size(312, 22);
+			this.textBox13.TabIndex = 25;
+			// 
+			// dataGridView1
+			// 
+			this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Column1,
+            this.Column2,
+            this.Column3});
+			this.dataGridView1.Location = new System.Drawing.Point(13, 86);
+			this.dataGridView1.Margin = new System.Windows.Forms.Padding(4);
+			this.dataGridView1.Name = "dataGridView1";
+			this.dataGridView1.RowHeadersWidth = 51;
+			this.dataGridView1.Size = new System.Drawing.Size(451, 342);
+			this.dataGridView1.TabIndex = 26;
+			// 
+			// Column1
+			// 
+			this.Column1.HeaderText = "Column1";
+			this.Column1.MinimumWidth = 6;
+			this.Column1.Name = "Column1";
+			this.Column1.Width = 125;
+			// 
+			// Column2
+			// 
+			this.Column2.HeaderText = "Column2";
+			this.Column2.MinimumWidth = 6;
+			this.Column2.Name = "Column2";
+			this.Column2.Width = 125;
+			// 
+			// Column3
+			// 
+			this.Column3.HeaderText = "Column3";
+			this.Column3.MinimumWidth = 6;
+			this.Column3.Name = "Column3";
+			this.Column3.Width = 125;
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(800, 450);
+			this.Controls.Add(this.dataGridView1);
+			this.Controls.Add(this.textBox13);
 			this.Controls.Add(this.button9);
 			this.Controls.Add(this.textBox12);
 			this.Controls.Add(this.textBox11);
@@ -285,7 +325,6 @@
 			this.Controls.Add(this.checkBox2);
 			this.Controls.Add(this.checkBox1);
 			this.Controls.Add(this.button7);
-			this.Controls.Add(this.listView1);
 			this.Controls.Add(this.textBox6);
 			this.Controls.Add(this.textBox5);
 			this.Controls.Add(this.textBox4);
@@ -301,6 +340,7 @@
 			this.Name = "Form1";
 			this.Text = "Form1";
 			this.Load += new System.EventHandler(this.Form1_Load);
+			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -320,7 +360,6 @@
 		private System.Windows.Forms.TextBox textBox4;
 		private System.Windows.Forms.TextBox textBox5;
 		private System.Windows.Forms.TextBox textBox6;
-		private System.Windows.Forms.ListView listView1;
 		private System.Windows.Forms.Button button7;
 		private System.Windows.Forms.CheckBox checkBox1;
 		private System.Windows.Forms.CheckBox checkBox2;
@@ -333,6 +372,11 @@
 		private System.Windows.Forms.TextBox textBox11;
 		private System.Windows.Forms.TextBox textBox12;
 		private System.Windows.Forms.Button button9;
+		private System.Windows.Forms.TextBox textBox13;
+		private System.Windows.Forms.DataGridView dataGridView1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+		private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
 	}
 }
 

@@ -12,191 +12,165 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 namespace ripasso_pre_rientro_form
 {
 	
-	internal class Funzioniesterne
+	static public class Funzioniesterne
 	{
-		public string path = @"..\..\..\file\caslini.csv";
-		
+
+
 
 		//funzione
-		public void miovalore(char sep = ';')
+		static public bool miovalore(int fisso, string path)
 		{
-			string[] linea = File.ReadAllLines(path);
-			if (File.Exists(path))
+			using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
 			{
-				using (StreamWriter sw = new StreamWriter(path))
+				byte[] b = new byte[fisso]; 
+				UTF8Encoding enc = new UTF8Encoding(true);
+				fs.Read(b, 0, fisso);
+				string line = enc.GetString(b).TrimEnd();
+
+				string[] split = line.Split(';');
+				for (int i = 0; i < split.Length; i++)
+					if (split[i] == "miovalore") return false;
+
+				fs.Position = enc.GetBytes(line).Length;
+
+				byte[] info = enc.GetBytes(";miovalore;logic");
+				fs.Write(info, 0, info.Length); 
+
+				fs.Position = fisso + 2;
+				for (int lin = 2, pos; fs.Read(b, 0, fisso) > 0; lin++) 
 				{
-					Random r = new Random();
-					linea[0] += ";miovalore";
-					sw.WriteLine(linea[0]);
-					for (int i = 1; i < linea.Length; i++)
+					line = enc.GetString(b);
+					pos = enc.GetBytes(line.TrimEnd()).Length;
+					fs.Position = fs.Position - fisso + pos; 
+
+					
+					line = $";{new Random(lin * Environment.TickCount).Next(10, 20 + 1)};0";
+					info = enc.GetBytes(line);
+					fs.Write(info, 0, info.Length); 
+
+					fs.Position = (fisso + 2) * lin; 
+				}
+			}
+			return true;
+		}
+
+		//funzione
+
+		static public int Contacampi(int fisso, string path)
+		{
+
+			using (FileStream sw = new FileStream(path,FileMode.Open,FileAccess.Read,FileShare.None))
+			{
+				byte[] b = new byte[fisso];
+				sw.Read(b,0,fisso);
+				return new UTF8Encoding(true).GetString(b).Split(';').Length;
+			}
+
+		}
+
+		//funzione
+
+		static public  int LunghezzaFIX(int fisso, int l, string path)
+		{
+			int nfdi; 
+			if (l < 100) nfdi = 200; else nfdi = l / 100 * 100 + 200;
+			
+
+			if (fisso != nfdi)
+			{
+				string tpath = Path.GetDirectoryName(path) + "\\temp.csv";
+				File.Copy(path, tpath, true);
+				using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Write, FileShare.None))
+				{
+					using (FileStream temp = new FileStream(tpath, FileMode.Open, FileAccess.Read, FileShare.None))
 					{
-						linea[i] += sep + r.Next(10, 21).ToString();
-						sw.WriteLine(linea[i]);
+						UTF8Encoding enc = new UTF8Encoding(true);
+						int b;
+						string line = "";
+						while ((b = temp.ReadByte()) > 0) 
+							if ((char)b == '\n')
+							{
+								
+								Byte[] info = enc.GetBytes(line.TrimEnd(' ', '\r').PadRight(nfdi) + "\r\n"); 
+								fs.Write(info, 0, info.Length); 
+								line = "";
+							}
+							else 
+								line += (char)b;
+
+						
+						fs.SetLength(fs.Position);
 					}
+					File.Delete(tpath);
 				}
 			}
+			return nfdi;
 		}
 
 		//funzione
 
-		public int Contacampi()
-		{
-
-			using (StreamReader sw = new StreamReader(path))
-			{
-				string nc = sw.ReadLine();
-
-				string[] campi = nc.Split(';');
-
-				int y = campi.Length;
-
-				return y;
-			}
-
-		}
-
-		//funzione
-
-		public void LunghezzaFIX(int l)
-		{
-
-			int[] c = new int[1000];
-
-			string[] c2 = new string[1000];
-
-			int dim = 0;
-
-			using (StreamReader sw = new StreamReader(path))
-			{
-				string a;
-
-				a = sw.ReadLine();
-
-				while (a != null)
-				{
-					int b = a.Length;
-
-					c[dim] = l - b;
-
-					c2[dim] = a;
-
-					dim++;
-
-					a = sw.ReadLine();
-				}
-
-			}
-
-			using (StreamWriter sw = new StreamWriter(path))
-			{
-				dim = 0;
-
-				while (c2[dim] != null)
-				{
-
-					string a = null;
-
-					for (int j = 0; j < c[dim]; j++)
-					{
-						a = a + " ";
-					}
-
-					sw.WriteLine(c2[dim] + a);
-
-					dim++;
-				}
-			}
-
-		}
-
-		//funzione
-
-		public void Aggiuntarecord(string coda1, string coda2, string coda3)
+		static public void Aggiuntarecord(string coda1, string coda2, string coda3, string path, int fisso)
 		{
 			bool[] a = new bool[1000];
 
 			string[] p = new string[1000];
 
 			int dim = 0;
+			byte[] bytes = new byte[1000];
+			UTF8Encoding e = new UTF8Encoding(true);
+			string line = null;
 
-			using (StreamReader sw = new StreamReader(path))
+			using (FileStream fs = new FileStream(path, FileMode.Append, FileAccess.Write, FileShare.None))
 			{
-				string b = sw.ReadLine();
+				line = $"{coda1};{coda2};{coda3};{new Random().Next(10,21)};0".PadRight(fisso)+Environment.NewLine;
+				bytes = e.GetBytes(line);
 
-				while (b != null)
-				{
-					a[dim] = true;
-
-					p[dim] = b;
-
-					b = sw.ReadLine();
-
-					dim++;
-				}
-
-				if (b == null)
-				{
-					a[dim] = false;
-				}
-
-			}
-
-			using (StreamWriter sw = new StreamWriter(path))
-			{
-				dim = 0;
-
-				while (dim < 1000)
-				{
-
-					if (a[dim] == false)
-					{
-						sw.WriteLine(coda1 + ";" + coda2 + ";" + coda3 + ";");
-						break;
-					}
-					sw.WriteLine(p[dim]);
-					dim++;
-				}
+				fs.Write(bytes, 0, bytes.Length);
 			}
 		}
+
 		//funzione
 
-		public string ricerca( bool checkBox1, bool checkBox2, bool checkBox3,string textBox7, string textBox8,string textBox9)
+		static public string ricerca( bool checkBox1, bool checkBox2, bool checkBox3,string textBox7, string textBox8,string textBox9,string path,int fisso)
 		{
-			
-			string[] record = File.ReadAllLines(path);
-			for (int i = 0; i < record.Length; i++)
+			byte[] bytes = new byte[1000];
+			UTF8Encoding e = new UTF8Encoding(true);
+			using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))
 			{
-			
-				string[] campi = record[i].Split(';');
-				if (checkBox1)
+				while (fs.Read(bytes,0,fisso)>0)
 				{
-					if (campi[0].ToLower() == textBox7.ToLower())
+					string line = e.GetString(bytes);
+					string[] campi = line.Split(';');
+					if (checkBox1)
 					{
-						return record[i];
-
-					}
-					if (checkBox2)
-					{
-						if (campi[1].ToLower() == textBox8.ToLower())
+						if (campi[0].ToLower() == textBox7.ToLower())
 						{
-							return record[i];
+							return line;
 
 						}
-					}
-					if (checkBox3)
-					{
-						if (campi[2].ToLower() == textBox9.ToLower())
+						if (checkBox2)
 						{
-							return record[i];
+							if (campi[1].ToLower() == textBox8.ToLower())
+							{
+								return line;
+
+							}
+						}
+						if (checkBox3)
+						{
+							if (campi[2].ToLower() == textBox9.ToLower())
+							{
+								return line;
+							}
 						}
 					}
+
 				}
-
 			}
 			return "";
 		}
 		//funzione
-		public void Modifica(string a1, string a2, string a3)
+		static public void Modifica(string a1, string a2, string a3,string path)
 		{
 			string a = a1;
 
@@ -277,7 +251,7 @@ namespace ripasso_pre_rientro_form
 		}
 
 		//funzione
-		public void Cancellazionelogica(string a1)
+		static public void Cancellazionelogica(string a1,string path)
 		{
 			bool[] a = new bool[1000];
 

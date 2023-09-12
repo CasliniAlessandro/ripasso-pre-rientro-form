@@ -9,35 +9,36 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-
+using static ripasso_pre_rientro_form.Funzioniesterne;
 namespace ripasso_pre_rientro_form
 {
 	public partial class Form1 : Form
 	{
 		public string path = @"..\..\..\file\caslini.csv";
-		public int l = 0;
+		public int l = 0, fisso=0;
 
-		Funzioniesterne a;
+		
 		public  Form1()
 		{
 			InitializeComponent();
-			a = new Funzioniesterne();
+			
 		}
 
 		private void Form1_Load(object sender, EventArgs e)
-		{ 
-
+		{
+			button3_Click(sender, e);
+			button4_Click(sender, e);
 		}
 
 		private void button1_Click(object sender, EventArgs e)
 		{
-			a.miovalore();
+			miovalore(fisso, path);
 		}
 		private void button2_Click(object sender, EventArgs e)
 		{
-			a.Contacampi();
+			Contacampi( fisso, path);
 
-			int nc = a.Contacampi();
+			int nc = Contacampi(fisso, path);
 
 			MessageBox.Show("Il numero dei campi è:" + nc);
 		}
@@ -117,7 +118,7 @@ namespace ripasso_pre_rientro_form
 			else
 			{
 				
-				a.LunghezzaFIX(l);
+				fisso=LunghezzaFIX(fisso,l,path);
 				MessageBox.Show("Tutti i record hanno la stessa lunghezza");
 			}
 
@@ -125,7 +126,7 @@ namespace ripasso_pre_rientro_form
 		}
 		private void button5_Click(object sender, EventArgs e)
 		{
-			a.Aggiuntarecord(textBox1.Text, textBox2.Text, textBox3.Text);
+			Aggiuntarecord(textBox1.Text, textBox2.Text, textBox3.Text,path,fisso);
 			textBox1.Text = "";
 			textBox2.Text = "";
 			textBox3.Text = "";
@@ -134,6 +135,30 @@ namespace ripasso_pre_rientro_form
 
 		private void button6_Click(object sender, EventArgs e)
 		{
+			Visualizza();
+		}
+
+		private void button7_Click(object sender, EventArgs e)
+		{
+		 ricerca(checkBox1.Checked, checkBox2.Checked, checkBox3.Checked,textBox7.Text, textBox8.Text, textBox9.Text, path,fisso);
+			MessageBox.Show("L'elemento ricercato si trova nella posizione:");
+		}
+
+		private void button8_Click(object sender, EventArgs e)
+		{
+			Modifica(textBox10.Text, textBox11.Text, textBox12.Text,path);
+			
+		}
+		private void button9_Click(object sender, EventArgs e)
+		{
+			Cancellazionelogica(textBox13.Text,path);
+			
+		}
+
+		public void Visualizza()
+		{
+			string[]lines = File.ReadAllLines(path);
+			dataGridView1.Rows.Clear();
 			string y = textBox4.Text;
 			string x = textBox5.Text;
 			string z = textBox6.Text;
@@ -146,25 +171,30 @@ namespace ripasso_pre_rientro_form
 			bool x2 = false;
 			bool z2 = false;
 
-			using (StreamReader sw = new StreamReader(path))
+
+			byte[] bytes = new byte[fisso];
+			UTF8Encoding e = new UTF8Encoding(true);
+			using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))
 			{
-				string d = sw.ReadLine();
-
-				string[] c = d.Split(';');
-
 				int dim = 0;
+				fs.Read(bytes, 0, fisso);
+				fs.Position += 2;
+				string line = e.GetString(bytes);
+				string[] campi = line.Split(';');
 
-				for (int i = 0; i < c.Length; i++)
+				for (; dim < campi.Length; dim++)
 				{
-					if (y == c[dim])
+
+
+					if (y == campi[dim])
 					{
 						y1 = dim;
 					}
-					if (x == c[dim])
+					if (x == campi[dim])
 					{
 						x1 = dim;
 					}
-					if (z == c[dim])
+					if (z == campi[dim])
 					{
 						z1 = dim;
 					}
@@ -181,74 +211,44 @@ namespace ripasso_pre_rientro_form
 					{
 						z2 = true;
 					}
-
-					dim++;
 				}
 
-			}
-
-			using (StreamReader sw = new StreamReader(path))
-			{
-				string d = sw.ReadLine();
-
-				while (d != null)
+				
+				while (fs.Read(bytes, 0, fisso) > 0)
 				{
+					fs.Position += 2;
+					line = e.GetString(bytes);
+					campi = line.Split(';');
+					string[] row = new string[3];
 
-					string[] campi = d.Split(';');
-
-					if (y2 == true)
+					if (!y2)
 					{
-						listView1.Items.Add("Campo1: ");
-					}
-					else
-					{
-						listView1.Items.Add("Campo1: " + campi[y1]);
+						row[0] = campi[y1];
 					}
 
-					if (x2 == true)
+
+					if (!x2)
 					{
-						listView1.Items.Add("Campo2: ");
-					}
-					else
-					{
-						listView1.Items.Add("Campo2: " + campi[x1]);
+						row[1] = campi[x1];
 					}
 
-					if (z2 == true)
+
+					if (!z2)
 					{
-						listView1.Items.Add("Campo3: ");
-					}
-					else
-					{
-						listView1.Items.Add("Campo3: " + campi[z1]);
+						row[2] = campi[z1];
 					}
 
-					listView1.Items.Add("");
 
-					d = sw.ReadLine();
-
+					dataGridView1.Rows.Add(row[0], row[1], row[2]);
 				}
 			}
-
 			textBox4.Text = "";
 			textBox5.Text = "";
 			textBox6.Text = "";
 		}
 
-		private void button7_Click(object sender, EventArgs e)
-		{
-			a.ricerca(checkBox1.Checked, checkBox2.Checked, checkBox3.Checked,textBox7.Text, textBox8.Text, textBox9.Text);
-		}
 
-		private void button8_Click(object sender, EventArgs e)
-		{
-			a.Modifica(textBox10.Text, textBox11.Text, textBox12.Text);
-			
-		}
-		private void button9_Click(object sender, EventArgs e)
-		{
-			a.Cancellazionelogica(textBox8.Text);
-			
-		}
+		
+
 	}
 }
