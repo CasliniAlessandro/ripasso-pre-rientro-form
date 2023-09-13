@@ -118,7 +118,7 @@ namespace ripasso_pre_rientro_form
 			else
 			{
 				
-				fisso=LunghezzaFIX(fisso,l,path);
+				fisso=LunghezzaFIX(fisso,l,path)+2;
 				MessageBox.Show("Tutti i record hanno la stessa lunghezza");
 			}
 
@@ -140,8 +140,8 @@ namespace ripasso_pre_rientro_form
 
 		private void button7_Click(object sender, EventArgs e)
 		{
-		 ricerca(checkBox1.Checked, checkBox2.Checked, checkBox3.Checked,textBox7.Text, textBox8.Text, textBox9.Text, path,fisso);
-			MessageBox.Show("L'elemento ricercato si trova nella posizione:");
+			
+			MessageBox.Show("L'elemento ricercato si trova nella posizione:" + ricerca(checkBox1.Checked, checkBox2.Checked, checkBox3.Checked, textBox7.Text, textBox8.Text, textBox9.Text, path, fisso));
 		}
 
 		private void button8_Click(object sender, EventArgs e)

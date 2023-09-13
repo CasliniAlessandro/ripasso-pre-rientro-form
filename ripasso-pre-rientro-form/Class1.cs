@@ -133,7 +133,7 @@ namespace ripasso_pre_rientro_form
 
 		static public string ricerca( bool checkBox1, bool checkBox2, bool checkBox3,string textBox7, string textBox8,string textBox9,string path,int fisso)
 		{
-			byte[] bytes = new byte[1000];
+			byte[] bytes = new byte[fisso];
 			UTF8Encoding e = new UTF8Encoding(true);
 			using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))
 			{
