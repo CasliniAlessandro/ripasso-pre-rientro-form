@@ -11,7 +11,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 
 namespace ripasso_pre_rientro_form
 {
-	
+
 	static public class Funzioniesterne
 	{
 
@@ -22,7 +22,7 @@ namespace ripasso_pre_rientro_form
 		{
 			using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
 			{
-				byte[] b = new byte[fisso]; 
+				byte[] b = new byte[fisso];
 				UTF8Encoding enc = new UTF8Encoding(true);
 				fs.Read(b, 0, fisso);
 				string line = enc.GetString(b).TrimEnd();
@@ -32,23 +32,23 @@ namespace ripasso_pre_rientro_form
 					if (split[i] == "miovalore") return false;
 
 				fs.Position = enc.GetBytes(line).Length;
-
-				byte[] info = enc.GetBytes(";miovalore;logic");
-				fs.Write(info, 0, info.Length); 
+				m
+				byte[] info = enc.GetBytes(";miovalore");
+				fs.Write(info, 0, info.Length);
 
 				fs.Position = fisso + 2;
-				for (int lin = 2, pos; fs.Read(b, 0, fisso) > 0; lin++) 
+				for (int lin = 2, pos; fs.Read(b, 0, fisso) > 0; lin++)
 				{
 					line = enc.GetString(b);
 					pos = enc.GetBytes(line.TrimEnd()).Length;
-					fs.Position = fs.Position - fisso + pos; 
+					fs.Position = fs.Position - fisso + pos;
 
-					
-					line = $";{new Random(lin * Environment.TickCount).Next(10, 20 + 1)};0";
+
+					line = $";{new Random(lin * Environment.TickCount).Next(10, 20 + 1)}";
 					info = enc.GetBytes(line);
-					fs.Write(info, 0, info.Length); 
+					fs.Write(info, 0, info.Length);
 
-					fs.Position = (fisso + 2) * lin; 
+					fs.Position = (fisso + 2) * lin;
 				}
 			}
 			return true;
@@ -59,22 +59,72 @@ namespace ripasso_pre_rientro_form
 		static public int Contacampi(int fisso, string path)
 		{
 
-			using (FileStream sw = new FileStream(path,FileMode.Open,FileAccess.Read,FileShare.None))
+			using (FileStream sw = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))
 			{
 				byte[] b = new byte[fisso];
-				sw.Read(b,0,fisso);
+				sw.Read(b, 0, fisso);
 				return new UTF8Encoding(true).GetString(b).Split(';').Length;
 			}
 
 		}
 
+    //funzione
+		static public int[] LunghezzaMaxRecord(string path)
+		{
+			using (StreamReader sw = new StreamReader(path))
+			{
+				int d = 0;
+
+				string a = sw.ReadLine();
+
+				string[] campi = a.Split(';');
+
+				int[] arr = new int[(campi.Length) + 1];
+
+				for (int i = 0; i < campi.Length; i++)
+				{
+					arr[d] = campi[i].Length;
+					d++;
+				}
+				arr[(arr.Length) - 1] = a.Length;
+
+				while (a != null)
+				{
+					d = 0;
+
+					string[] campi2 = a.Split(';');
+
+					for (int i = 0; i < campi2.Length; i++)
+					{
+						if (arr[d] < campi2[i].Length)
+						{
+							arr[d] = campi2[i].Length;
+						}
+
+						d++;
+					}
+
+					if (arr[(arr.Length) - 1] < a.Length)
+					{
+						arr[(arr.Length) - 1] = a.Length;
+					}
+
+					a = sw.ReadLine();
+
+				}
+
+				d = 0;
+				return arr;
+			}
+		}
+
 		//funzione
 
-		static public  int LunghezzaFIX(int fisso, int l, string path)
+		static public int LunghezzaFIX(int fisso, int l, string path)
 		{
-			int nfdi; 
+			int nfdi;
 			if (l < 100) nfdi = 200; else nfdi = l / 100 * 100 + 200;
-			
+
 
 			if (fisso != nfdi)
 			{
@@ -87,18 +137,18 @@ namespace ripasso_pre_rientro_form
 						UTF8Encoding enc = new UTF8Encoding(true);
 						int b;
 						string line = "";
-						while ((b = temp.ReadByte()) > 0) 
+						while ((b = temp.ReadByte()) > 0)
 							if ((char)b == '\n')
 							{
-								
-								Byte[] info = enc.GetBytes(line.TrimEnd(' ', '\r').PadRight(nfdi) + "\r\n"); 
-								fs.Write(info, 0, info.Length); 
+
+								Byte[] info = enc.GetBytes(line.TrimEnd(' ', '\r').PadRight(nfdi) + "\r\n");
+								fs.Write(info, 0, info.Length);
 								line = "";
 							}
-							else 
+							else
 								line += (char)b;
 
-						
+
 						fs.SetLength(fs.Position);
 					}
 					File.Delete(tpath);
@@ -122,7 +172,7 @@ namespace ripasso_pre_rientro_form
 
 			using (FileStream fs = new FileStream(path, FileMode.Append, FileAccess.Write, FileShare.None))
 			{
-				line = $"{coda1};{coda2};{coda3};{new Random().Next(10,21)};0".PadRight(fisso)+Environment.NewLine;
+				line = $"{coda1};{coda2};{coda3};{new Random().Next(10, 21)};0".PadRight(fisso) + Environment.NewLine;
 				bytes = e.GetBytes(line);
 
 				fs.Write(bytes, 0, bytes.Length);
@@ -131,13 +181,13 @@ namespace ripasso_pre_rientro_form
 
 		//funzione
 
-		static public string ricerca( bool checkBox1, bool checkBox2, bool checkBox3,string textBox7, string textBox8,string textBox9,string path,int fisso)
+		static public string ricerca(bool checkBox1, bool checkBox2, bool checkBox3, string textBox7, string textBox8, string textBox9, string path, int fisso)
 		{
 			byte[] bytes = new byte[fisso];
 			UTF8Encoding e = new UTF8Encoding(true);
 			using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))
 			{
-				while (fs.Read(bytes,0,fisso)>0)
+				while (fs.Read(bytes, 0, fisso) > 0)
 				{
 					string line = e.GetString(bytes);
 					string[] campi = line.Split(';');
@@ -170,7 +220,7 @@ namespace ripasso_pre_rientro_form
 			return "";
 		}
 		//funzione
-		static public void Modifica(string a1, string a2, string a3,string path)
+		static public void Modifica(string a1, string a2, string a3, string path)
 		{
 			string a = a1;
 
@@ -251,7 +301,7 @@ namespace ripasso_pre_rientro_form
 		}
 
 		//funzione
-		static public void Cancellazionelogica(string a1,string path)
+		static public void Cancellazionelogica(string a1, string path)
 		{
 			bool[] a = new bool[1000];
 
@@ -300,8 +350,10 @@ namespace ripasso_pre_rientro_form
 				}
 			}
 		}
-	}
 
+		
+
+	}
 }
 
 
