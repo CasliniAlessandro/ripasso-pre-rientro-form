@@ -21,6 +21,10 @@ namespace ripasso_pre_rientro_form
 		public  Form1()
 		{
 			InitializeComponent();
+
+			fisso=LunghezzaFIX(fisso, path) + 2;
+			miovalore(fisso, path);
+			Visualizza();
 			
 		}
 
@@ -39,41 +43,30 @@ namespace ripasso_pre_rientro_form
 
 		private void button3_Click(object sender, EventArgs e)
 		{
-			  int []arr=LunghezzaMaxRecord(path);
-			  int d = 0;
-				for (int i = 0; i < arr.Length; i++)
-				{
-				
-					if (i != arr.Length - 1)
-					{
-					  MessageBox.Show("Lunghezza campo " + d.ToString() + ": " + arr[i]);
-					}
-					else
-					{
-						MessageBox.Show("Lunghezza record " + d.ToString() + ": " + (arr[arr.Length - 1] + 1));
-					}
-					d++;
-				}
+			int[] arr = LunghezzaMaxRecord(path);
+			int d = 0;
+			for (int i = 0; i < arr.Length; i++)
+			{
 
-				l = arr[arr.Length - 1];
-			
+				if (i != arr.Length - 1)
+				{
+					MessageBox.Show("Lunghezza campo " + d.ToString() + ": " + arr[i]);
+				}
+				else
+				{
+					MessageBox.Show("Lunghezza record " + d.ToString() + ": " + (arr[arr.Length - 1] + 1));
+				}
+				d++;
+			}
+
+			l = arr[arr.Length - 1];
+
 		}
 
 		private void button4_Click(object sender, EventArgs e)
-		{
-			if (l == 0)
-			{
-
-				MessageBox.Show("Calcolare prima lunghezza del record più lungo ");
-			}
-			else
-			{
-				
-				fisso=LunghezzaFIX(fisso,l,path)+2;
+		{				
+				fisso=LunghezzaFIX(fisso,path)+2;
 				MessageBox.Show("Tutti i record hanno la stessa lunghezza");
-			}
-
-
 		}
 		private void button5_Click(object sender, EventArgs e)
 		{
@@ -97,106 +90,79 @@ namespace ripasso_pre_rientro_form
 
 		private void button8_Click(object sender, EventArgs e)
 		{
-			Modifica(textBox10.Text, textBox11.Text, textBox12.Text,path);
+			if (int.Parse(txtLine.Text) > 0)
+			{
+				Modifica(txtLine.Text, txtRegione.Text, txtAnno.Text, txtStalli.Text, txtMiovalore.Text, fisso, path);
+
+			}
+			else 
+		  {
+				MessageBox.Show(" deve essere maggiore di 0");
+			}
+
+			
 			
 		}
 		private void button9_Click(object sender, EventArgs e)
 		{
-			Cancellazionelogica(textBox13.Text,path);
+			Cancellazionelogica(txtCanclog.Text,fisso,path);
 			
 		}
 
+
 		public void Visualizza()
 		{
-			string[]lines = File.ReadAllLines(path);
-			dataGridView1.Rows.Clear();
-			string y = textBox4.Text;
-			string x = textBox5.Text;
-			string z = textBox6.Text;
-
-			int y1 = 0;
-			int x1 = 0;
-			int z1 = 0;
-
-			bool y2 = false;
-			bool x2 = false;
-			bool z2 = false;
-
-
+			listView1.Clear();
+		  
 			byte[] bytes = new byte[fisso];
 			UTF8Encoding e = new UTF8Encoding(true);
 			using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))
 			{
-				int dim = 0;
 				fs.Read(bytes, 0, fisso);
-				fs.Position += 2;
-				string line = e.GetString(bytes);
-				string[] campi = line.Split(';');
+				string line = e.GetString(bytes).TrimEnd();
+				string[]campi=line.Split(';');
+				ColumnHeader[] ch = new ColumnHeader[campi.Length];
 
-				for (; dim < campi.Length; dim++)
+				ch[0] = new ColumnHeader
 				{
+					Text = "linea",
+					Width = -2,
+					TextAlign = HorizontalAlignment.Center
+				};
+				for (int i = 0; i < campi.Length - 1; i++) //salta logic
+					ch[i + 1] = new ColumnHeader
+					{
+						Text = campi[i],
+						Width = -2,
+						TextAlign = HorizontalAlignment.Center
+					};
+				listView1.Columns.AddRange(ch);
 
 
-					if (y == campi[dim])
-					{
-						y1 = dim;
-					}
-					if (x == campi[dim])
-					{
-						x1 = dim;
-					}
-					if (z == campi[dim])
-					{
-						z1 = dim;
-					}
 
-					if (y == "")
-					{
-						y2 = true;
-					}
-					if (x == "")
-					{
-						x2 = true;
-					}
-					if (z == "")
-					{
-						z2 = true;
-					}
-				}
+				ListViewItem item;
 
-				
-				while (fs.Read(bytes, 0, fisso) > 0)
+				for(int i=1;fs.Read(bytes, 0, fisso) > 0;i++)
 				{
-					fs.Position += 2;
-					line = e.GetString(bytes);
+					line = e.GetString(bytes).TrimEnd();
+					if (line.EndsWith("1")) continue; //skippa le linee cancellate.
+
 					campi = line.Split(';');
-					string[] row = new string[3];
-
-					if (!y2)
+					item = new ListViewItem($"{i}");
+					for(int j = 0;j<campi.Length-1;j++)
 					{
-						row[0] = campi[y1];
+						item.SubItems.Add(campi[j]);							
 					}
+					listView1.Items.Add(item);	
+				}
+				for (int i = 0; i < campi.Length; i++)
+				{
+					ch[i].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
 
-
-					if (!x2)
-					{
-						row[1] = campi[x1];
-					}
-
-
-					if (!z2)
-					{
-						row[2] = campi[z1];
-					}
-
-
-					dataGridView1.Rows.Add(row[0], row[1], row[2]);
 				}
 			}
-			textBox4.Text = "";
-			textBox5.Text = "";
-			textBox6.Text = "";
 		}
+		
 
 
 		
